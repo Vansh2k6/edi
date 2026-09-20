@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Vault</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <!-- Layered document planes (design system): static, no scroll animation. -->
+    <div class="planes" aria-hidden="true">
+      <div class="plane plane-1"></div>
+      <div class="plane plane-2"></div>
+      <div class="plane plane-3"></div>
+    </div>
+    <header class="topbar">
+      <span class="brand">Privacy&nbsp;Vault</span>
+      <nav id="nav" class="nav"></nav>
+      <button id="logout" class="btn btn-ghost" type="button" hidden>Log out</button>
+    </header>
+    <main id="main" class="main">
+      <section id="view" class="view" aria-live="polite"></section>
+    </main>
+    <script type="module" src="/assets/app.js"></script>
+  </body>
+</html>

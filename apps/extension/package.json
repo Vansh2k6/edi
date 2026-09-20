@@ -1,0 +1,18 @@
+{
+  "name": "@pv/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs && node scripts/check-bundle.mjs"
+  },
+  "dependencies": {
+    "@pv/envelope": "*",
+    "@pv/schemas": "*",
+    "@pv/ui": "*"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.3.0",
+    "esbuild": "*"
+  }
+}

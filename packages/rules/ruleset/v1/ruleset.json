@@ -1,0 +1,251 @@
+{
+  "ruleset_version": "v1",
+  "checksum": "68f3cc923cb87475980cce5e4ca32e11105c0b3832c941b3cf305e93e462e8eb",
+  "default_posture": {
+    "effect": "ask_user",
+    "override_class": "overridable",
+    "reason_code": "DEFAULT_ASK_USER",
+    "rationale": "When no rule matches, the request is surfaced to the owner rather than allowed or blocked: the system does not hold enough information to decide on the owner's behalf, and silence is not consent."
+  },
+  "rules": [
+    {
+      "rule_id": "R-CRITICAL-CREDENTIAL",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "category_in",
+        "categories": [
+          "CAT-CREDENTIAL"
+        ]
+      },
+      "effect": "block",
+      "priority": 1000,
+      "scope": {
+        "data_categories": [
+          "CAT-CREDENTIAL"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Credential material is never disclosed automatically to a website, under any consent or override. This block is not overridable.",
+      "override_class": "critical",
+      "origin": "system",
+      "reason_code": "CREDENTIAL_NEVER_DISCLOSED",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-CRITICAL-FINANCIAL",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "sensitivity_at_least",
+        "level": "Critical"
+      },
+      "effect": "block",
+      "priority": 990,
+      "scope": {
+        "data_categories": [
+          "CAT-FINANCIAL"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Critical-sensitivity financial data is not released to a web origin by default; Force Allow cannot bypass this block.",
+      "override_class": "critical",
+      "origin": "system",
+      "reason_code": "FINANCIAL_CRITICAL_BLOCK",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-CRITICAL-MEDICAL",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "category_in",
+        "categories": [
+          "CAT-MEDICAL"
+        ]
+      },
+      "effect": "block",
+      "priority": 990,
+      "scope": {
+        "data_categories": [
+          "CAT-MEDICAL"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Medical data is not disclosed automatically; the block is critical so a mistaken override cannot release it.",
+      "override_class": "critical",
+      "origin": "system",
+      "reason_code": "MEDICAL_CRITICAL_BLOCK",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-REPUTATION-MALICIOUS",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "signal_is",
+        "signal": "reputation",
+        "value": "malicious"
+      },
+      "effect": "block",
+      "priority": 800,
+      "scope": {
+        "data_categories": [],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "A destination with a malicious reputation block is refused regardless of category or consent, and the owner may override it after seeing why.",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "DESTINATION_REPUTATION_MALICIOUS",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-DOMAIN-NEW",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "domain_age_days_lt",
+        "days": 30
+      },
+      "effect": "ask_user",
+      "priority": 700,
+      "scope": {
+        "data_categories": [],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "A domain registered within the last 30 days has no track record; the request is surfaced rather than allowed. If the age signal is unavailable this rule is unevaluated instead of matching, so an outage cannot be mistaken for a young domain.",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "DOMAIN_RECENTLY_REGISTERED",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-REPUTATION-UNKNOWN",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "signal_unknown",
+        "signal": "reputation"
+      },
+      "effect": "ask_user",
+      "priority": 650,
+      "scope": {
+        "data_categories": [],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "When no reputation signal could be resolved, the owner decides. Unknown is treated as a reason to ask, never as a reason to trust (D-028).",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "REPUTATION_UNKNOWN_ASK",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-IDENTITY-CONFIRM",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "category_in",
+        "categories": [
+          "CAT-IDENTITY"
+        ]
+      },
+      "effect": "ask_user",
+      "priority": 600,
+      "scope": {
+        "data_categories": [
+          "CAT-IDENTITY"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Identity documents and identifiers are released only after the owner confirms the specific request.",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "IDENTITY_REQUIRES_CONFIRMATION",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-MECHANISM-UNSUPPORTED",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "mechanism_in",
+        "mechanisms": [
+          "unsupported",
+          "websocket"
+        ]
+      },
+      "effect": "warn",
+      "priority": 500,
+      "scope": {
+        "data_categories": [],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "A mechanism the extension cannot inspect or enforce is surfaced as a warning: the product does not claim a protection it cannot deliver (D-025).",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "MECHANISM_NOT_ENFORCEABLE",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-LOCATION-LOW",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "category_in",
+        "categories": [
+          "CAT-LOCATION"
+        ]
+      },
+      "effect": "warn",
+      "priority": 400,
+      "scope": {
+        "data_categories": [
+          "CAT-LOCATION"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Location data is allowed only for the owner's own request, and any disclosure of it is surfaced as a warning with the precise field list.",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "LOCATION_DISCLOSURE_WARNING",
+      "expires_at": null
+    },
+    {
+      "rule_id": "R-CONTACT-ALLOW",
+      "ruleset_version": "v1",
+      "condition": {
+        "op": "and",
+        "operands": [
+          {
+            "op": "category_in",
+            "categories": [
+              "CAT-CONTACT"
+            ]
+          },
+          {
+            "op": "mechanism_in",
+            "mechanisms": [
+              "fetch",
+              "form",
+              "xhr"
+            ]
+          }
+        ]
+      },
+      "effect": "allow",
+      "priority": 300,
+      "scope": {
+        "data_categories": [
+          "CAT-CONTACT"
+        ],
+        "origins": [],
+        "applications": []
+      },
+      "rationale": "Contact details alone, over an inspectable mechanism, are the one category the default posture allows without confirmation.",
+      "override_class": "overridable",
+      "origin": "system",
+      "reason_code": "CONTACT_LOW_RISK_ALLOW",
+      "expires_at": null
+    }
+  ]
+}

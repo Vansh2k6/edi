@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    /* `chrome` for the extension APIs, `node` because the tests in this package
+       read files and use vitest. Node imports in shipped extension source are
+       caught by tests/security/import-boundaries.test.ts instead of by types. */
+    "types": ["chrome", "node"],
+    "paths": {
+      "@pv/schemas": ["../../packages/schemas/src/index.ts"],
+      "@pv/ui": ["../../packages/ui/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "../../scripts/tests/apps/extension/src/**/*.ts"]
+}

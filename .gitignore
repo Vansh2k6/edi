@@ -1,0 +1,34 @@
+# Dependencies and build output
+node_modules/
+dist/
+dist-e2e/
+apps/extension/dist-e2e/
+coverage/
+*.tsbuildinfo
+
+# Secrets and local environment
+.env
+.env.local
+.env.*.local
+infra/kms-dev/
+scripts/.state/
+
+# IDE, Tools, and Agent metadata
+.impeccable/
+graphify-out/
+.agents/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+
+# Test suites and internal verification scripts (only demo.ts is included)
+scripts/tests/
+scripts/check-no-secrets.mjs
+scripts/dead-code-report.mjs
+scripts/e2e-browser.mjs
+scripts/e2e-extension-contract.ts
+scripts/e2e-page-server.mjs
+scripts/ruleset-checksum.ts

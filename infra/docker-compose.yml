@@ -1,0 +1,39 @@
+# Development dependencies for the security core.
+# Postgres and Redis are optional in development: the core falls back to
+# in-memory equivalents when DATABASE_URL / REDIS_URL are unset (DEV-02, DEV-03
+# in the implementation plan). They are required for the integration suites.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pv-postgres
+    environment:
+      POSTGRES_USER: pv
+      POSTGRES_PASSWORD: pv
+      POSTGRES_DB: privacy_vault
+    ports:
+      - '5432:5432'
+    volumes:
+      - pv-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U pv -d privacy_vault']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: pv-redis
+    command: ['redis-server', '--appendonly', 'yes']
+    ports:
+      - '6379:6379'
+    volumes:
+      - pv-redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pv-postgres-data:
+  pv-redis-data:

@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Privacy Vault Guard",
+  "version": "0.1.0",
+  "description": "Observes inbound data-access requests and surfaces vault disclosure decisions.",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "alarms", "tabs", "declarativeNetRequest", "scripting", "webNavigation"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Privacy Vault Guard"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["page-hook.js"],
+      "matches": ["https://*/*", "http://*/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

@@ -1,0 +1,9 @@
+[
+  { "data_category_id": "CAT-CREDENTIAL", "category_name": "Credentials", "sensitivity_level": "Critical" },
+  { "data_category_id": "CAT-IDENTITY", "category_name": "Identity", "sensitivity_level": "High" },
+  { "data_category_id": "CAT-CONTACT", "category_name": "Communication", "sensitivity_level": "Low" },
+  { "data_category_id": "CAT-FINANCIAL", "category_name": "Financial", "sensitivity_level": "Critical" },
+  { "data_category_id": "CAT-MEDICAL", "category_name": "Medical", "sensitivity_level": "Critical" },
+  { "data_category_id": "CAT-LOCATION", "category_name": "Location", "sensitivity_level": "Medium" },
+  { "data_category_id": "CAT-DOCUMENTS", "category_name": "Documents", "sensitivity_level": "High" }
+]

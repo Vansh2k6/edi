@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@pv/schemas": ["./packages/schemas/src/index.ts"],
+      "@pv/envelope": ["./packages/envelope/src/index.ts"],
+      "@pv/crypto": ["./packages/crypto/src/index.ts"],
+      "@pv/rules": ["./packages/rules/src/index.ts"],
+      "@pv/risk": ["./packages/risk/src/index.ts"],
+      "@pv/audit": ["./packages/audit/src/index.ts"],
+      "@pv/domain-intel": ["./packages/domain-intel/src/index.ts"]
+    }
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "services/*/src/**/*.ts",
+    "scripts/**/*.ts",
+    "vitest.config.ts"
+  ],
+  /* The extension is typechecked by its own config, because it needs the DOM and
+     chrome typings that the core must not see. Both run from `npm run typecheck`.
+     Its tests live mirrored under scripts/tests and are likewise excluded here. */
+  "exclude": ["apps/extension", "scripts/tests/apps/extension"]
+}

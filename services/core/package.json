@@ -1,0 +1,28 @@
+{
+  "name": "@pv/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/server.ts",
+  "scripts": {
+    "dev": "tsx watch --tsconfig ../../tsconfig.json src/server.ts",
+    "start": "tsx --tsconfig ../../tsconfig.json src/server.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --tsconfig ../../tsconfig.json src/db/migrate.ts"
+  },
+  "dependencies": {
+    "@pv/crypto": "*",
+    "@pv/domain-intel": "*",
+    "@pv/rules": "*",
+    "@pv/schemas": "*",
+    "drizzle-orm": "*",
+    "fastify": "*",
+    "ioredis": "*",
+    "postgres": "*",
+    "zod": "*"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.23.13"
+  }
+}

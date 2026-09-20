@@ -1,0 +1,93 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci
+
+      - name: Typecheck (strict, no emit)
+        run: npm run typecheck
+
+      - name: Unit and contract tests
+        run: npm test
+
+      - name: Security-negative suites
+        run: npm run test:security
+
+      - name: Extension build and manifest permission allowlist
+        run: npm run build:extension
+
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: pv
+          POSTGRES_PASSWORD: pv
+          POSTGRES_DB: privacy_vault
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U pv" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgres://pv:pv@localhost:5432/privacy_vault
+      REDIS_URL: redis://localhost:6379
+      KEY_PROVIDER: dev-shim
+      KEK_REF: dev-only-placeholder
+      NODE_ENV: test
+      CORE_PORT: '8080'
+      LOG_LEVEL: error
+      DOMAIN_INTEL_CACHE_TTL_SECONDS: '86400'
+      DOMAIN_INTEL_STALE_AFTER_SECONDS: '21600'
+      DOMAIN_PROVIDER_TIMEOUT_MS: '800'
+      DOMAIN_PROVIDER_RETRIES: '2'
+      DOMAIN_PROVIDER_RATE_LIMIT_PER_MINUTE: '60'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply migrations
+        run: npm run db:migrate
+
+      - name: Integration tests against real Postgres and Redis
+        run: npm test
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+      - name: Reject committed secrets and key material
+        run: node scripts/check-no-secrets.mjs
